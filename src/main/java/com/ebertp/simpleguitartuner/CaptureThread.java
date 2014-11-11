@@ -12,7 +12,7 @@ class CaptureThread extends Thread {
 
 	private final static double divi = 8.192;
 	private final static int sampleSize = 8192;
-	private final static int spectreSize = sampleSize * 2 * 2;
+	private final static int spectreSize = 32768; // sampleSize * 2 * 2;
 
 	public CaptureThread(final TargetDataLine targetDataLine) {
 		this.targetDataLine = targetDataLine;
@@ -36,13 +36,11 @@ class CaptureThread extends Thread {
 				try {
 					for (int i = 0; i < sampleSize; i++) {
 						ar[i] = data[i];
-						// ai[i] = 0.0;
 					}
 					for (int i = sampleSize; i < spectreSize; i++) {
 						ar[i] = 0.0;
-						// ai[i] = 0.0;
 					}
-					computeFFT(1, spectreSize, ar, ai);
+					computeFFT(spectreSize, ar, ai);
 
 					double maxAmpl = 0;
 					double maxIndex = 0;
@@ -54,11 +52,10 @@ class CaptureThread extends Thread {
 							maxIndex = i;
 						}
 					}
-
-					if (maxAmpl > 0.01) {
+					if (maxAmpl > 0.02) {
 						double f = maxIndex / divi;
 						erreur = ((f - freqOK) / (freqOK - freqMin));
-						System.out.println("freqOK: " + freqOK + " f: " + f + " Abweichnung: " + erreur);
+						System.out.println("freqOK: " + freqOK + " f: " + f + " Abweichnung: " + erreur + "maxAmpl: " + maxAmpl);
 					}
 
 				} catch (Exception e2) {
@@ -73,8 +70,8 @@ class CaptureThread extends Thread {
 		}
 	}
 
-	public static void computeFFT(final int sign, final int n, final double[] ar, final double[] ai) {
-		double scale = 2.0 / n;
+	public static void computeFFT(final int n, final double[] ar, final double[] ai) {
+		final double scale = 2.0 / n;
 		int i, j;
 		for (i = j = 0; i < n; ++i) {
 			if (j >= i) {
@@ -94,7 +91,7 @@ class CaptureThread extends Thread {
 		}
 		int mmax, istep;
 		for (mmax = 1, istep = 2 * mmax; mmax < n; mmax = istep, istep = 2 * mmax) {
-			double delta = sign * Math.PI / mmax;
+			double delta = Math.PI / mmax;
 			for (int m = 0; m < mmax; ++m) {
 				double w = m * delta;
 				double wr = Math.cos(w);

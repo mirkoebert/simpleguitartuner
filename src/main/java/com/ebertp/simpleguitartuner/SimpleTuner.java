@@ -1,4 +1,5 @@
 package com.ebertp.simpleguitartuner;
+
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
@@ -7,6 +8,7 @@ import javax.sound.sampled.TargetDataLine;
 public final class SimpleTuner {
 
 	public void start(final String saite) {
+		System.out.println("Simple Guitar Tuner");
 		double freqMin;
 		double freqMax;
 		double freqOK;
@@ -53,6 +55,11 @@ public final class SimpleTuner {
 
 	public static void main(final String args[]) {
 		SimpleTuner st = new SimpleTuner();
-		st.start(args[0]);
+		if (args == null || args.length == 0) {
+			st.start("");
+		} else {
+			st.start(args[0]);
+		}
+
 	}
 }
