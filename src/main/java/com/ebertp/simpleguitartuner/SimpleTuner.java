@@ -11,9 +11,9 @@ public final class SimpleTuner {
 
 	private Scanner myScanner;
 
-	public void start(String saite) {
+	public void start() {
 		System.out.println("Simple Guitar Tuner");
-		saite = getSaite();
+		String saite = getSaite();
 		double freqMin;
 		double freqMax;
 		double freqOK;
@@ -92,11 +92,6 @@ public final class SimpleTuner {
 
 	public static void main(final String args[]) {
 		SimpleTuner st = new SimpleTuner();
-		if (args == null || args.length == 0) {
-			st.start("");
-		} else {
-			st.start(args[0]);
-		}
-
+		st.start();
 	}
 }
