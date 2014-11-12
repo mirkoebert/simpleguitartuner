@@ -55,7 +55,10 @@ class CaptureThread extends Thread {
 					if (maxAmpl > 0.02) {
 						double f = maxIndex / divi;
 						erreur = ((f - freqOK) / (freqOK - freqMin));
-						System.out.println("f: " + f + "\t freqOK: " + freqOK + "\t deviation: " + erreur);
+						System.out.format(" f_current: %3.4f", f);
+						System.out.format(" f_target: %3.4f", freqOK);
+						System.out.format(" deviation: %2.4f", erreur);
+						System.out.print("\r");
 					}
 
 				} catch (Exception e2) {
