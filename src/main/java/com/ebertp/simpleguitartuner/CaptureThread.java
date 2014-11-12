@@ -2,7 +2,7 @@ package com.ebertp.simpleguitartuner;
 
 import javax.sound.sampled.TargetDataLine;
 
-class CaptureThread extends Thread {
+final class CaptureThread extends Thread {
 
 	private TargetDataLine targetDataLine;
 
@@ -55,12 +55,11 @@ class CaptureThread extends Thread {
 					if (maxAmpl > 0.02) {
 						double f = maxIndex / divi;
 						erreur = ((f - freqOK) / (freqOK - freqMin));
+						System.out.print("\r");
 						System.out.format(" f_current: %3.4f", f);
 						System.out.format(" f_target: %3.4f", freqOK);
 						System.out.format(" deviation: %2.4f", erreur);
-						System.out.print("\r");
 					}
-
 				} catch (Exception e2) {
 					System.out.println(e2);
 				}
