@@ -14,4 +14,4 @@ Usage
 * Type the name of the next string and press enter. 
 * Play the string and tune
 * ...
-* Exit: <CTRL>-<C>
+* Exit: \<CTRL\> + \<C\>
