@@ -62,30 +62,30 @@ public final class SimpleTuner {
 		String saitenName;
 		String realSaite = "";
 
-		System.out.println("Welche Saite soll gestimmt werden (e1,a,d,g,h,e2)?");
+		System.out.println("Which guitar string you want to tune: e1, a, d, g, h, e2?");
 		myScanner = new Scanner(System.in);
 		saitenName = myScanner.next();
 
 		if (saitenName.equalsIgnoreCase("e1")) {
-			System.out.println("Mit dem folgenden Ton kann die e1-Saite gestimmt werden.");
+			System.out.println("Tuning e1-String.");
 			realSaite = "e1";
 		} else if (saitenName.equalsIgnoreCase("a")) {
-			System.out.println("Mit dem folgenden Ton kann die a-Saite gestimmt werden.");
+			System.out.println("Tuning a-String:.");
 			realSaite = "a";
 		} else if (saitenName.equalsIgnoreCase("d")) {
-			System.out.println("Mit dem folgenden Ton kann die d-Saite gestimmt werden.");
+			System.out.println("Tuning d-String.");
 			realSaite = "d";
 		} else if (saitenName.equalsIgnoreCase("g")) {
-			System.out.println("Mit dem folgenden Ton kann die g-Saite gestimmt werden.");
+			System.out.println("Tuning g-String.");
 			realSaite = "g";
 		} else if (saitenName.equalsIgnoreCase("h")) {
-			System.out.println("Mit dem folgenden Ton kann die h-Saite gestimmt werden.");
+			System.out.println("Tuning h-String.");
 			realSaite = "h";
 		} else if (saitenName.equalsIgnoreCase("e2")) {
-			System.out.println("Mit dem folgenden Ton kann die e2-Saite gestimmt werden.");
+			System.out.println("Tuning e2-String.");
 			realSaite = "e2";
 		} else {
-			System.out.println("Der Buchstabe bezeichnet keine Gitarrensaite, geben sie e1,a,d,g,h,e2 ein!");
+			System.out.println("The Character " + saitenName + " represents no guitar string. Please use e1, a, d, g, h or e2!");
 		}
 		return realSaite;
 	}
