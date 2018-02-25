@@ -10,7 +10,7 @@ public final class SimpleTuner {
 	public void start() {
 		System.out.println("Simple Guitar Tuner");
 		System.out.println("To exit the progeramm, press <CTRL> + <C>");
-		System.out.println("Which guitar string you want to tune: \033[0;1me1, a, d, g, h, e2\033[0;0m?");
+		System.out.println("Which guitar string do you want to tune? Enter key: \033[0;1me1, a, d, g, h, e2\033[0;0m?");
 
 		AudioFormat audioFormat = new AudioFormat(8000.0F, 8, 1, true, false);
 		DataLine.Info dataLineInfo = new DataLine.Info(TargetDataLine.class, audioFormat);
@@ -25,7 +25,7 @@ public final class SimpleTuner {
 
 			captureThread.start();
 		} catch (Exception e2) {
-			System.out.println("Error: Unable to start sound data acqusition: " + e2.getLocalizedMessage());
+			System.err.println("Error: Unable to start sound data acqusition: " + e2.getLocalizedMessage());
 		}
 	}
 
