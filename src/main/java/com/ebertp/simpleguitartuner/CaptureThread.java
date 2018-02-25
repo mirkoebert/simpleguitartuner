@@ -8,7 +8,7 @@ final class CaptureThread extends Thread {
 
 	private double freqMin;
 	private double freqMax;
-	private double freqOK;
+	private double fTarget;
 
 	private final static double divi = 8.192;
 	private final static int sampleSize = 8192;
@@ -21,7 +21,7 @@ final class CaptureThread extends Thread {
 	public void setFreq(final double min, final double max, final double ok) {
 		freqMin = min;
 		freqMax = max;
-		freqOK = ok;
+		fTarget = ok;
 	}
 
 	@Override
@@ -44,7 +44,7 @@ final class CaptureThread extends Thread {
 
 					double maxAmpl = 0;
 					double maxIndex = 0;
-					double erreur = 0;
+					double fError = 0;
 
 					for (int i = (int) (freqMin * divi); i < (freqMax * divi); i++) {
 						if (Math.abs(ai[i]) > maxAmpl) {
@@ -53,18 +53,15 @@ final class CaptureThread extends Thread {
 						}
 					}
 					if (maxAmpl > 0.02) {
-						double f = maxIndex / divi;
-						erreur = ((f - freqOK) / (freqOK - freqMin));
-						System.out.print("\r");
-						System.out.format(" f_current: %3.4f", f);
-						System.out.format(" f_target: %3.4f", freqOK);
-						System.out.format(" deviation: %2.4f", erreur);
-						if (erreur > 0.1) {
-							System.out.format(" Tune down.");
-						} else if (erreur < -0.1) {
-							System.out.format(" Tune up.");
+						double fCurrent = maxIndex / divi;
+						fError = ((fCurrent - fTarget) / (fTarget - freqMin));
+						System.out.format("\r f_target: %3.4  f_current: %3.4f   deviation: %2.4f ", fTarget, fCurrent, fError);
+						if (fError > 0.1) {
+							System.out.format("Tune down.");
+						} else if (fError < -0.1) {
+							System.out.format("Tune up.");
 						} else {
-							System.out.format(" Tune Ok.");
+							System.out.format("Tune Ok.");
 						}
 					}
 				} catch (Exception e2) {
@@ -74,7 +71,7 @@ final class CaptureThread extends Thread {
 			}
 
 		} catch (Exception e) {
-			System.out.println(e);
+			System.err.println(e);
 			System.exit(1);
 		}
 	}
