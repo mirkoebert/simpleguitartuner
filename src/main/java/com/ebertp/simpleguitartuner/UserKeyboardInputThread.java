@@ -46,7 +46,7 @@ final class UserKeyboardInputThread extends Thread {
 			}
 			captureThread.setFreq(freqMin, freqMax, freqOK);
 			try {
-				sleep(1000);
+				sleep(1612);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

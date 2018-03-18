@@ -1,5 +1,7 @@
 package com.ebertp.simpleguitartuner;
 
+import java.util.Arrays;
+
 import javax.sound.sampled.TargetDataLine;
 
 final class CaptureThread extends Thread {
@@ -8,20 +10,20 @@ final class CaptureThread extends Thread {
 
 	private double freqMin;
 	private double freqMax;
-	private double fTarget;
+	private double freqTarget;
 
-	private final static double divi = 8.192;
-	private final static int sampleSize = 8192;
+	private final static double DIVI = 8.192;
+	private final static int SAMPLE_SIZE = 8192;
 	private final static int spectreSize = 32768; // sampleSize * 2 * 2;
 
 	public CaptureThread(final TargetDataLine targetDataLine) {
 		this.targetDataLine = targetDataLine;
 	}
 
-	public void setFreq(final double min, final double max, final double ok) {
-		freqMin = min;
-		freqMax = max;
-		fTarget = ok;
+	public void setFreq(final double fmin, final double fmax, final double fok) {
+		freqMin = fmin;
+		freqMax = fmax;
+		freqTarget = fok;
 	}
 
 	@Override
@@ -31,14 +33,11 @@ final class CaptureThread extends Thread {
 			targetDataLine.start();
 			double[] ar = new double[spectreSize];
 			double[] ai = new double[spectreSize];
-
-			while ((targetDataLine.read(data, 0, sampleSize) > 0)) {
+			Arrays.fill(ai, 0.0);
+			while ((targetDataLine.read(data, 0, SAMPLE_SIZE) > 0)) {
 				try {
-					for (int i = 0; i < sampleSize; i++) {
+					for (int i = 0; i < SAMPLE_SIZE; i++) {
 						ar[i] = data[i];
-					}
-					for (int i = sampleSize; i < spectreSize; i++) {
-						ar[i] = 0.0;
 					}
 					computeFFT(spectreSize, ar, ai);
 
@@ -46,16 +45,16 @@ final class CaptureThread extends Thread {
 					double maxIndex = 0;
 					double fError = 0;
 
-					for (int i = (int) (freqMin * divi); i < (freqMax * divi); i++) {
+					for (int i = (int) (freqMin * DIVI); i < (freqMax * DIVI); i++) {
 						if (Math.abs(ai[i]) > maxAmpl) {
 							maxAmpl = Math.abs(ai[i]);
 							maxIndex = i;
 						}
 					}
 					if (maxAmpl > 0.02) {
-						double fCurrent = maxIndex / divi;
-						fError = ((fCurrent - fTarget) / (fTarget - freqMin));
-						System.out.format("\r f_target: %3.4  f_current: %3.4f   deviation: %2.4f ", fTarget, fCurrent, fError);
+						double freqCurrent = maxIndex / DIVI;
+						fError = ((freqCurrent - freqTarget) / (freqTarget - freqMin));
+						System.out.printf("\r");
 						if (fError > 0.1) {
 							System.out.format("Tune down.");
 						} else if (fError < -0.1) {
@@ -63,15 +62,17 @@ final class CaptureThread extends Thread {
 						} else {
 							System.out.format("Tune Ok.");
 						}
+						System.out.printf("\t f_target: %3.4f  f_current: %3.4f   deviation: %2.4f ", freqTarget, freqCurrent, fError);
 					}
 				} catch (Exception e2) {
-					System.out.println(e2);
+					System.err.println("Error 1: "+e2.getLocalizedMessage());
+					e2.printStackTrace();
 				}
 				targetDataLine.flush();
 			}
 
 		} catch (Exception e) {
-			System.err.println(e);
+			System.err.println("Error 2: "+e.getLocalizedMessage());
 			System.exit(1);
 		}
 	}
