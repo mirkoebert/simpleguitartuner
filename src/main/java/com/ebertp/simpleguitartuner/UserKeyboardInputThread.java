@@ -77,6 +77,9 @@ final class UserKeyboardInputThread extends Thread {
 		} else if (saitenName.equalsIgnoreCase("e2")) {
 			System.out.println("Tuning e2-String.");
 			realSaite = "e2";
+		} else if (saitenName.equalsIgnoreCase("q")) {
+			System.out.println("Bye.");
+			System.exit(NORM_PRIORITY);
 		} else {
 			System.out.println("The Character " + saitenName + " represents no guitar string. Please use e1, a, d, g, h or e2!");
 		}
